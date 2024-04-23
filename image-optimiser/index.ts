@@ -126,5 +126,10 @@ const resizeCompressImage = (tinifyKey: string, data: Uint8Array, maxWidth: numb
 const handleGet = async (): Promise<Response> => {	
 	const readme = await Deno.readTextFile("./README.md");
 
-	return response(parseMarkdown(readme), 200);
+	return new Response(parseMarkdown(readme), {
+		headers: {
+			...corsHeaders,
+			"Content-Type": "text/html; charset=utf-8"
+		}
+	}); 
 }
