@@ -6,6 +6,7 @@ import { Tinify } from "https://deno.land/x/tinify@v1.0.0/mod.ts";
 
 import { corsHeaders } from "../_shared/cors.ts";
 import response from "../_shared/response.ts";
+import parseMarkdown from "../_shared/markdown-parser.ts";
 
 const base64ToArrayBuffer = (base64: string): ArrayBuffer => {
 	const binary_string =  atob(base64);
@@ -20,6 +21,10 @@ const base64ToArrayBuffer = (base64: string): ArrayBuffer => {
 Deno.serve(async (req) => {
 	if (req.method === "OPTIONS") {
 		return new Response("ok", { headers: corsHeaders })
+	}
+
+	if (req.method === "GET") {
+		return handleGet();
 	}
 
 	const formData = await req.formData();
@@ -116,4 +121,10 @@ const resizeCompressImage = (tinifyKey: string, data: Uint8Array, maxWidth: numb
 			}
 		});	
 	});
+}
+
+const handleGet = async (): Promise<Response> => {	
+	const readme = await Deno.readTextFile("./README.md");
+
+	return response(parseMarkdown(readme), 200);
 }
