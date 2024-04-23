@@ -1,12 +1,12 @@
-# Image Resize Compress
+# Image Resize & Compress
 
-### Method: POST
+Method: POST
 
-### URL: https://image-resize-compress.deno.dev/
+URL: https://image-resize-compress.deno.dev/
 
-### Body: Type: FormData
+Body Type: FormData
 
-### Layout:
+Body Layout:
 
 ```json
 {
