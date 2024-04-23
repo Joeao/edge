@@ -124,7 +124,7 @@ const resizeCompressImage = (tinifyKey: string, data: Uint8Array, maxWidth: numb
 }
 
 const handleGet = async (): Promise<Response> => {	
-	const readme = await Deno.readTextFile("./README.md");
+	const readme = await Deno.readTextFile("image-optimiser/README.md");
 
 	return new Response(parseMarkdown(readme), {
 		headers: {
