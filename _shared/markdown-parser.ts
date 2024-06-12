@@ -1,7 +1,6 @@
 import { CSS, render } from "https://deno.land/x/gfm@0.6.0/mod.ts";
 
 const parseMarkdown = (markdown: string): string => {
-	
 	const body = render(markdown, {
 		baseUrl: "https://example.com",
 	});
