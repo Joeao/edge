@@ -9,18 +9,18 @@ import response from "../_shared/response.ts";
 import parseMarkdown from "../_shared/markdown-parser.ts";
 
 const base64ToArrayBuffer = (base64: string): ArrayBuffer => {
-	const binary_string =  atob(base64);
+	const binary_string = atob(base64);
 	const len = binary_string.length;
-	const bytes = new Uint8Array( len );
-	for (let i = 0; i < len; i++)        {
+	const bytes = new Uint8Array(len);
+	for (let i = 0; i < len; i++) {
 		bytes[i] = binary_string.charCodeAt(i);
 	}
 	return bytes.buffer;
-}
+};
 
 Deno.serve(async (req) => {
 	if (req.method === "OPTIONS") {
-		return new Response("ok", { headers: corsHeaders })
+		return new Response("ok", { headers: corsHeaders });
 	}
 
 	if (req.method === "GET") {
@@ -50,18 +50,25 @@ Deno.serve(async (req) => {
 		const imageBuffer = await readFile(image);
 		const data = new Uint8Array(imageBuffer);
 
-		const compressedImageBase64 = await resizeCompressImage(body.tinifyKey, data, body.maxWidth, body.maxHeight);
+		const compressedImageBase64 = await resizeCompressImage(
+			body.tinifyKey,
+			data,
+			body.maxWidth,
+			body.maxHeight,
+		);
 
 		const mimeType = `image/${body.format}`;
 
-		const blob = new Blob([base64ToArrayBuffer(compressedImageBase64)], { type: mimeType });
-		
+		const blob = new Blob([base64ToArrayBuffer(compressedImageBase64)], {
+			type: mimeType,
+		});
+
 		return new Response(blob, {
 			headers: {
 				...corsHeaders,
-				"Content-Type": mimeType
-			}
-		}); 
+				"Content-Type": mimeType,
+			},
+		});
 	} catch (err) {
 		console.error(err);
 		return response("", 400);
@@ -73,11 +80,11 @@ const readFile = (image: FormDataEntryValue | null): Promise<ArrayBuffer> => {
 		const reader = new FileReader();
 		reader.onload = () => {
 			if (reader.result instanceof ArrayBuffer) {
-				resolve(reader.result)
+				resolve(reader.result);
 			} else {
 				reject("File type not supported");
 			}
-		}
+		};
 
 		const blob = image instanceof File ? image : null;
 
@@ -86,21 +93,26 @@ const readFile = (image: FormDataEntryValue | null): Promise<ArrayBuffer> => {
 		} else {
 			reject("File type not supported");
 		}
-	})
-}
+	});
+};
 
-const resizeCompressImage = (tinifyKey: string, data: Uint8Array, maxWidth: number, maxHeight: number): Promise<string> => {
+const resizeCompressImage = (
+	tinifyKey: string,
+	data: Uint8Array,
+	maxWidth: number,
+	maxHeight: number,
+): Promise<string> => {
 	return new Promise((resolve, reject) => {
 		initialize().then(() => {
 			const tinify = new Tinify({
-				api_key: tinifyKey
+				api_key: tinifyKey,
 			});
-	
+
 			try {
 				ImageMagick.read(data, async (img) => {
 					// Resize image, maintaining aspect ratio
 					const ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
-		
+
 					if (img.width > maxWidth || img.height > maxHeight) {
 						if (img.width === img.height) {
 							img.resize(maxWidth, maxHeight);
@@ -110,26 +122,26 @@ const resizeCompressImage = (tinifyKey: string, data: Uint8Array, maxWidth: numb
 							img.resize(maxWidth * ratio, maxHeight);
 						}
 					}
-		
-					const tinyImage = await tinify.compress(data); 
+
+					const tinyImage = await tinify.compress(data);
 					const { base64 } = await tinyImage.toBase64();
-					
+
 					resolve(base64 as string);
 				});
 			} catch (err) {
 				reject(err);
 			}
-		});	
+		});
 	});
-}
+};
 
-const handleGet = async (): Promise<Response> => {	
+const handleGet = async (): Promise<Response> => {
 	const readme = await Deno.readTextFile("image-optimiser/README.md");
 
 	return new Response(parseMarkdown(readme), {
 		headers: {
 			...corsHeaders,
-			"Content-Type": "text/html; charset=utf-8"
-		}
-	}); 
-}
+			"Content-Type": "text/html; charset=utf-8",
+		},
+	});
+};

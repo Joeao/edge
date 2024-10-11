@@ -5,7 +5,7 @@ const parseMarkdown = (markdown: string): string => {
 		baseUrl: "https://example.com",
 	});
 
-	return`
+	return `
 		<!DOCTYPE html>
 		<html lang="en">
 			<head>
@@ -26,6 +26,6 @@ const parseMarkdown = (markdown: string): string => {
 			</body>
 		</html>
 	`;
-}
+};
 
 export default parseMarkdown;
