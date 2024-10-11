@@ -1,8 +1,5 @@
-import {
-	ImageMagick,
-	initialize,
-} from "https://deno.land/x/imagemagick_deno@0.0.26/mod.ts";
-import { Tinify } from "https://deno.land/x/tinify@v1.0.0/mod.ts";
+import { ImageMagick, initialize } from "imageMagick";
+import { Tinify } from "Tinify";
 
 import { corsHeaders } from "../_shared/cors.ts";
 import response from "../_shared/response.ts";
