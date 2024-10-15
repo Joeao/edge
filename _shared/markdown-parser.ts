@@ -1,4 +1,4 @@
-import { CSS, render } from "https://deno.land/x/gfm@0.6.0/mod.ts";
+import { CSS, render } from "gfm";
 
 const parseMarkdown = (markdown: string): string => {
 	const body = render(markdown, {

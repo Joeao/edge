@@ -1,7 +1,8 @@
 {
 	"imports": {
 		"imageMagick": "https://deno.land/x/imagemagick_deno@0.0.27/mod.ts",
-		"Tinify": "https://deno.land/x/tinify@v1.0.0/mod.ts"
+		"Tinify": "https://deno.land/x/tinify@v1.0.0/mod.ts",
+		"gfm": "https://deno.land/x/gfm@0.6.0/mod.ts"
 	},
 	"fmt": {
 		"useTabs": true
