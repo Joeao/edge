@@ -4,7 +4,7 @@ Method: POST
 
 URL: https://nlp-weighted-sentiment.deno.dev/
 
-Body Type: FormData
+Body Type: application/json
 
 Body Layout:
 
