@@ -19,4 +19,14 @@ Body Layout:
 
 ### Response
 
-Number between 0 and 1. 0 is the lowest and 1 is the highest.
+```json
+{
+  "score": [weighted_score], // Number between 0 and 1. 0 is the lowest and 1 is the highest.
+  "significantText": [
+    {
+      "score": [weighted_score], // Number between 0 and 1. 0 is the lowest and 1 is the highest.
+      "text": [content]
+    }
+  ]
+}
+```

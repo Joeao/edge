@@ -39,7 +39,29 @@ const postHandler = async (
 	const magnitude_weight = sentiment.documentSentiment.magnitude /
 			sentiment.documentSentiment.magnitude + 1;
 
-	return response(String(normalized_score * magnitude_weight), 200);
+	const overallScore = normalized_score * magnitude_weight;
+
+	const significantText = sentiment.sentences.flatMap((sentence) => {
+		const normalized_score = (sentence.sentiment.score + 1) / 2;
+		const overall_sentiment = (normalized_score * sentence.sentiment.magnitude) + (0.5 * (1 - sentence.sentiment.magnitude))
+
+		if (overall_sentiment > 0.75 || overall_sentiment <= 0.25) {
+			return {
+				score: overall_sentiment,
+				text: sentence.text,
+			};
+		}
+
+    return [];
+	});
+
+	return response(
+		JSON.stringify({
+			score: overallScore,
+			significantText,
+		}),
+		200,
+	);
 };
 
 Deno.serve((req) => {
@@ -50,15 +72,14 @@ Deno.serve((req) => {
 		case "OPTIONS": {
 			return OptionsHandler();
 		}
-    case "GET":
-      return handleGet();
+		case "GET":
+			return handleGet();
 		case "PUT":
 		default: {
 			return response("Method not supported", 405);
 		}
 	}
 });
-
 
 const handleGet = async (): Promise<Response> => {
 	const readme = await Deno.readTextFile("weighted_sentiment/README.md");
