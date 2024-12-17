@@ -36,8 +36,7 @@ const postHandler = async (
 
 	const sentiment: SentimentResponse = await res.json();
 	const normalized_score = (sentiment.documentSentiment.score + 1) / 2;
-	const magnitude_weight = sentiment.documentSentiment.magnitude /
-			sentiment.documentSentiment.magnitude + 1;
+	const magnitude_weight = sentiment.documentSentiment.magnitude / (sentiment.documentSentiment.magnitude + 1);
 
 	const overallScore = normalized_score * magnitude_weight;
 
