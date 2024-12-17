@@ -1,3 +1,5 @@
+import { corsHeaders } from "../_shared/cors.ts";
+import parseMarkdown from "../_shared/markdown-parser.ts";
 import OptionsHandler from "../_shared/OptionsHandler.ts";
 import response from "../_shared/response.ts";
 import type { SentimentResponse } from "./types.ts";
@@ -48,10 +50,23 @@ Deno.serve((req) => {
 		case "OPTIONS": {
 			return OptionsHandler();
 		}
+    case "GET":
+      return handleGet();
 		case "PUT":
-		case "GET":
 		default: {
 			return response("Method not supported", 405);
 		}
 	}
 });
+
+
+const handleGet = async (): Promise<Response> => {
+	const readme = await Deno.readTextFile("weighted_sentiment/README.md");
+
+	return new Response(parseMarkdown(readme), {
+		headers: {
+			...corsHeaders,
+			"Content-Type": "text/html; charset=utf-8",
+		},
+	});
+};
